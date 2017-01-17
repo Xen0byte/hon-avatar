@@ -12,7 +12,7 @@ const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account
 app.use((ctx, next) => {
   ctx.assert(ctx.req.url.length > 0 && ctx.req.url.length < 11, 400, 'invalid length');
   const str = ctx.req.url.split('/')[1];
-  ctx.assert(isNumber(str), 400, 'not a number');
+  ctx.assert(isNumber(str), 200, DEFAULT_AVATAR);
   const accountId = parseInt(ctx.req.url.split('/')[1], 10);
   const url = `https://www.heroesofnewerth.com/getAvatar_SSL.php?id=${accountId}`;
   return got(url, opt).then((res) => {

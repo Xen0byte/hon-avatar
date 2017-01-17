@@ -31,6 +31,6 @@ describe('avatar', () => {
   it('should check is number', () => {
     return request(app.listen())
       .get('/hello')
-      .expect(400);
+      .expect(200, 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png');
   });
 });
