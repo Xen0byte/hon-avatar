@@ -1,0 +1,10 @@
+sudo: false
+language: node_js
+node_js:
+  - "7"
+cache: yarn
+script:
+  - yarn global add codecov
+  - yarn coverage
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

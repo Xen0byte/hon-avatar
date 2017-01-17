@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "eslint-config-airbnb-base",
+    "eslint-config-airbnb-base/rules/strict"
+  ],
+  "rules": {
+    "no-param-reassign": ["error", { "props": false }],
+    "comma-dangle": ["error", {
+      arrays: "always-multiline",
+      objects: "always-multiline",
+      imports: "always-multiline",
+      exports: "always-multiline",
+      functions: "ignore",
+    }],
+    "arrow-body-style": 0
+  }
+}

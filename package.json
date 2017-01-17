@@ -1,0 +1,29 @@
+{
+  "name": "hon-avatar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "lint": "eslint --format=node_modules/eslint-formatter-pretty src test; exit 0",
+    "test": "mocha test/index.spec.js",
+    "coverage": "nyc npm test"
+  },
+  "repository": "https://github.com/scttcper/hon-avatar.git",
+  "author": "Scott Cooper <scttcper@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "got": "^6.7.1",
+    "is-number": "^3.0.0",
+    "kcors": "^2.2.0",
+    "koa": "^2.0.0-alpha.7"
+  },
+  "devDependencies": {
+    "eslint": "^3.13.1",
+    "eslint-config-airbnb-base": "^11.0.1",
+    "eslint-formatter-pretty": "^1.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "mocha": "^3.2.0",
+    "nyc": "^10.0.0",
+    "supertest": "^2.0.1"
+  }
+}
