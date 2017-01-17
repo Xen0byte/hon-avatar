@@ -8,9 +8,6 @@
     "test": "mocha test/index.spec.js",
     "coverage": "nyc npm test"
   },
-  "repository": "https://github.com/scttcper/hon-avatar.git",
-  "author": "Scott Cooper <scttcper@gmail.com>",
-  "license": "MIT",
   "dependencies": {
     "got": "^6.7.1",
     "is-number": "^3.0.0",
@@ -26,5 +23,14 @@
     "mocha": "^3.2.0",
     "nyc": "^10.0.0",
     "supertest": "^2.0.1"
-  }
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  },
+  "repository": "https://github.com/scttcper/hon-avatar.git",
+  "author": "Scott Cooper <scttcper@gmail.com>",
+  "license": "MIT"
 }
