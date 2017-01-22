@@ -9,7 +9,12 @@ app.use(cors());
 
 const myCache = new NodeCache({ stdTTL: 21600 });
 
-const opt = { method: 'HEAD', gzip: true };
+const opt = {
+  method: 'HEAD',
+  timeout: 900,
+  retries: 2,
+  encoding: null,
+};
 const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
 
 function getAvatar(url) {
