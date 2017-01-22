@@ -12,16 +12,17 @@
     "got": "^6.7.1",
     "is-number": "^3.0.0",
     "kcors": "^2.2.0",
-    "koa": "^2.0.0-alpha.7"
+    "koa": "^2.0.0-alpha.7",
+    "node-cache": "^4.1.1"
   },
   "devDependencies": {
-    "eslint": "^3.13.1",
+    "eslint": "^3.14.0",
     "eslint-config-airbnb-base": "^11.0.1",
     "eslint-formatter-pretty": "^1.1.0",
     "eslint-plugin-import": "^2.2.0",
     "istanbul": "^v1.1.0-alpha.1",
     "mocha": "^3.2.0",
-    "nyc": "^10.0.0",
+    "nyc": "^10.1.2",
     "supertest": "^2.0.1"
   },
   "nyc": {
