@@ -1,4 +1,5 @@
 const request = require('supertest');
+const assert = require('assert');
 
 const app = require('../index');
 
@@ -6,7 +7,10 @@ describe('avatar', () => {
   it('should return avatar', () => {
     return request(app.listen())
       .get('/7619944')
-      .expect(200, 'https://s3.amazonaws.com/naeu-icb2/icons/7/619/7619944/1.cai');
+      .expect(200)
+      .then((res) => {
+        assert(res.text.indexOf('7619944') !== -1);
+      });
   });
   it('should return default', () => {
     return request(app.listen())
