@@ -2,12 +2,15 @@ const Koa = require('koa');
 const cors = require('kcors');
 const got = require('got');
 const isNumber = require('is-number');
-const NodeCache = require('node-cache');
+const redis = require('redis');
 
 const app = module.exports = new Koa();
 app.use(cors());
 
-const myCache = new NodeCache({ stdTTL: 21600 });
+console.log(process.env.REDIS_URL)
+const client = redis.createClient({
+  url: process.env.REDIS_URL || null,
+});
 
 const opt = {
   method: 'HEAD',
@@ -17,7 +20,8 @@ const opt = {
 };
 const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
 
-function getAvatar(url) {
+function getAvatar(accountId) {
+  const url = `https://www.heroesofnewerth.com/getAvatar_SSL.php?id=${accountId}`;
   return got(url, opt)
     .then((res) => {
       return res.url;
@@ -27,21 +31,29 @@ function getAvatar(url) {
     });
 }
 
+function findOrGet(accountId) {
+  return new Promise((resolve) => {
+    client.get(accountId, (err, reply) => {
+      resolve(reply);
+    });
+  }).then((link) => {
+    if (!link) {
+      return getAvatar(accountId);
+    }
+    return link;
+  });
+}
+
 app.use((ctx, next) => {
   ctx.assert(ctx.req.url.length < 11, 400, 'invalid length');
   const str = ctx.req.url.split('/')[1];
   ctx.assert(isNumber(str), 200, DEFAULT_AVATAR);
   const accountId = parseInt(ctx.req.url.split('/')[1], 10);
-  const cached = myCache.get(accountId);
-  if (cached) {
-    ctx.body = cached;
-    return next();
-  }
-  const url = `https://www.heroesofnewerth.com/getAvatar_SSL.php?id=${accountId}`;
-  return getAvatar(url)
+  return findOrGet(accountId)
     .then((link) => {
       ctx.body = link;
-      myCache.set(accountId, link, 21600);
+      // 12 hours
+      client.set(accountId, link, 'PX', 43200000, 'NX');
       return next();
     });
 });
