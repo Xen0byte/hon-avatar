@@ -7,7 +7,6 @@ const redis = require('redis');
 const app = module.exports = new Koa();
 app.use(cors());
 
-console.log(process.env.REDIS_URL)
 const client = redis.createClient({
   url: process.env.REDIS_URL || null,
 });
