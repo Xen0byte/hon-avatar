@@ -12,3 +12,8 @@
 
 Gets the url for a hon player's avatar
 https://hon-avatar.now.sh/7619944
+
+##### Deploy using
+```bash
+now -e REDIS_URL=@redis_avatar
+```
