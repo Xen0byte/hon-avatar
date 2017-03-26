@@ -1,6 +1,6 @@
 {
   "name": "hon-avatar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "scripts": {
     "start": "node index",
@@ -12,12 +12,12 @@
     "got": "^6.7.1",
     "is-number": "^3.0.0",
     "kcors": "^2.2.0",
-    "koa": "^2.0.0-alpha.7",
-    "redis": "^2.6.5"
+    "koa": "^2.2.0",
+    "redis": "^2.7.1"
   },
   "devDependencies": {
-    "eslint": "^3.15.0",
-    "eslint-config-airbnb-base": "^11.1.0",
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb-base": "^11.1.2",
     "eslint-formatter-pretty": "^1.1.0",
     "eslint-plugin-import": "^2.2.0",
     "istanbul": "^v1.1.0-alpha.1",

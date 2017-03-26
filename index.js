@@ -4,7 +4,8 @@ const got = require('got');
 const isNumber = require('is-number');
 const redis = require('redis');
 
-const app = module.exports = new Koa();
+const app = new Koa();
+module.exports = app;
 app.use(cors());
 
 const client = redis.createClient({
