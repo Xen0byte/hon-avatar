@@ -44,18 +44,17 @@ function findOrGet(accountId) {
   });
 }
 
-app.use((ctx, next) => {
+app.use(async (ctx, next) => {
   ctx.assert(ctx.req.url.length < 11, 400, 'invalid length');
   const str = ctx.req.url.split('/')[1];
-  ctx.assert(isNumber(str), 200, DEFAULT_AVATAR);
+  if (!isNumber(str)) {
+    ctx.body = DEFAULT_AVATAR;
+    return next();
+  }
   const accountId = parseInt(ctx.req.url.split('/')[1], 10);
-  return findOrGet(accountId)
-    .then((link) => {
-      ctx.body = link;
-      // 12 hours
-      client.set(accountId, link, 'PX', 43200000, 'NX');
-      return next();
-    });
+  ctx.body = await findOrGet(accountId);
+  client.set(accountId, ctx.body, 'PX', 86400000, 'NX');
+  return next();
 });
 
 /* istanbul ignore if */

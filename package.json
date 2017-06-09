@@ -9,20 +9,20 @@
     "coverage": "nyc npm test"
   },
   "dependencies": {
-    "got": "^6.7.1",
+    "got": "^7.0.0",
     "is-number": "^3.0.0",
-    "kcors": "^2.2.0",
+    "kcors": "^2.2.1",
     "koa": "^2.2.0",
     "redis": "^2.7.1"
   },
   "devDependencies": {
-    "eslint": "^3.18.0",
-    "eslint-config-airbnb-base": "^11.1.2",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
     "eslint-formatter-pretty": "^1.1.0",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-import": "^2.3.0",
     "istanbul": "^v1.1.0-alpha.1",
-    "mocha": "^3.2.0",
-    "nyc": "^10.1.2",
+    "mocha": "^3.4.2",
+    "nyc": "^11.0.2",
     "supertest": "^3.0.0"
   },
   "nyc": {
