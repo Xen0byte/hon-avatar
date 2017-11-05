@@ -1,12 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - "7"
-services:
-  - redis
-cache: yarn
+  - 8
 script:
-  - yarn global add codecov
-  - yarn coverage
+  - npm install -g codecov
+  - npm run coverage
 after_success:
   - bash <(curl -s https://codecov.io/bash)
