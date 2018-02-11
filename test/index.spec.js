@@ -10,6 +10,7 @@ describe('avatar', function () {
       .get('/7619944')
       .expect(200)
       .then((res) => {
+        console.log(res.text);
         assert(res.text.indexOf('7619944') !== -1);
       });
   });

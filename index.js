@@ -8,10 +8,10 @@ module.exports = server;
 
 const opt = {
   method: 'HEAD',
-  timeout: 900,
+  timeout: 2000,
   uri: 'https://www.heroesofnewerth.com/getAvatar_SSL.php',
   qs: {
-    id: ''
+    id: '',
   },
   followRedirect: false,
   resolveWithFullResponse: true,
@@ -46,11 +46,11 @@ server.route({
     cache: {
       expiresIn: 7200, // 120 min
     },
-    handler: async function(request, h) {
-      if (!isNumber(request.params.id)) {
+    async handler(req) {
+      if (!isNumber(req.params.id)) {
         return DEFAULT_AVATAR;
       }
-      return await getAvatar(request.params.id);
+      return getAvatar(req.params.id);
     },
   },
 });
