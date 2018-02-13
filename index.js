@@ -2,8 +2,17 @@ const request = require('request-promise-native');
 const isNumber = require('is-number');
 const Hapi = require('hapi');
 const Joi = require('joi');
+const catboxMemory = require('catbox-memory');
 
-const server = Hapi.server({ port: 5000 });
+const server = Hapi.server({
+  port: 5000,
+  cache: [
+    {
+      name: 'cache',
+      engine: catboxMemory,
+    },
+  ],
+});
 module.exports = server;
 
 const opt = {
@@ -33,6 +42,7 @@ async function getAvatar(accountId) {
   }
 }
 
+let cache;
 server.route({
   method: 'GET',
   path: '/{id?}',
@@ -44,13 +54,22 @@ server.route({
     },
     cors: true,
     cache: {
-      expiresIn: 7200, // 120 min
+      expiresIn: 60 * 120 * 1000, // 120 min
     },
     async handler(req) {
+      if (!cache) {
+        cache = server.cache({ segment: 'avatar', expiresIn: 60 * 120 * 1000 });
+      }
+      const value = await cache.get(req.params.id, () => {});
+      if (value) {
+        return value;
+      }
       if (!isNumber(req.params.id)) {
         return DEFAULT_AVATAR;
       }
-      return getAvatar(req.params.id);
+      const avatar = await getAvatar(req.params.id);
+      await cache.set(req.params.id, avatar, 60 * 120 * 1000, () => {});
+      return avatar;
     },
   },
 });
