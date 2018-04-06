@@ -1,10 +1,18 @@
 const request = require('supertest');
 const assert = require('assert');
 
-const server = require('../index');
+const init = require('../index');
+
+let server;
 
 describe('avatar', function () {
   this.timeout(10000);
+  before(async () => {
+    server = await init();
+  });
+  after(() => {
+    server.stop();
+  });
   it('should return avatar', function () {
     return request(server.listener)
       .get('/7619944')

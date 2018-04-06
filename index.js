@@ -2,18 +2,9 @@ const request = require('request-promise-native');
 const isNumber = require('is-number');
 const Hapi = require('hapi');
 const Joi = require('joi');
-const catboxMemory = require('catbox-memory');
+const Memory = require('catbox-memory');
 
-const server = Hapi.server({
-  port: 5000,
-  cache: [
-    {
-      name: 'cache',
-      engine: catboxMemory,
-    },
-  ],
-});
-module.exports = server;
+const server = Hapi.server({ port: 5000 });
 
 const opt = {
   method: 'HEAD',
@@ -46,36 +37,53 @@ let cache;
 server.route({
   method: 'GET',
   path: '/{id?}',
-  config: {
+  options: {
+    cors: { origin: 'ignore' },
     validate: {
       params: {
-        id: Joi.string().min(0).max(11),
+        id: Joi.string()
+          .min(0)
+          .max(11),
       },
     },
-    cors: true,
     cache: {
       expiresIn: 60 * 120 * 1000, // 120 min
     },
     async handler(req) {
-      if (!cache) {
-        cache = server.cache({ segment: 'avatar', expiresIn: 60 * 120 * 1000 });
-      }
-      const value = await cache.get(req.params.id, () => {});
-      if (value) {
-        return value;
-      }
       if (!isNumber(req.params.id)) {
         return DEFAULT_AVATAR;
       }
+      const value = await cache
+        .get({
+          id: String(req.params.id),
+          segment: 'avatar',
+        })
+        .catch(console.error);
+      if (value) {
+        return value;
+      }
       const avatar = await getAvatar(req.params.id);
-      await cache.set(req.params.id, avatar, 60 * 120 * 1000, () => {});
+      await cache.set(
+        { id: String(req.params.id), segment: 'avatar' },
+        avatar,
+        60 * 120 * 1000,
+      );
       return avatar;
     },
   },
 });
 
+async function init() {
+  cache = server.cache({ segment: 'avatar', expiresIn: 60 * 120 * 1000 });
+  await server.initialize();
+  return server;
+}
+module.exports = init;
+
 /* istanbul ignore if */
 if (!module.parent) {
-  server.start();
+  init()
+    .then(svr => svr.start())
+    .catch(console.error);
   console.log('Listening on http://localhost:5000');
 }
