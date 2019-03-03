@@ -2,7 +2,6 @@ const request = require('request-promise-native');
 const isNumber = require('is-number');
 const Hapi = require('hapi');
 const Joi = require('joi');
-const Memory = require('catbox-memory');
 
 const server = Hapi.server({ port: 5000 });
 
@@ -17,8 +16,7 @@ const opt = {
   resolveWithFullResponse: true,
   simple: false,
 };
-const DEFAULT_AVATAR =
-  'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
+const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
 
 async function getAvatar(accountId) {
   opt.qs.id = accountId;

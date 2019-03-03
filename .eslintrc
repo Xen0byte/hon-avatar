@@ -10,7 +10,7 @@
       "objects": "always-multiline",
       "imports": "always-multiline",
       "exports": "always-multiline",
-      "functions": "ignore",
+      "functions": "ignore"
     }],
     "arrow-body-style": 0,
     "no-console": 0

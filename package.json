@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "lint": "eslint --format=node_modules/eslint-formatter-pretty src test",
+    "lint": "eslint index.js test",
     "test": "mocha test/index.spec.js",
     "coverage": "nyc npm test"
   },
