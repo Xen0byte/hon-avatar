@@ -15,5 +15,5 @@ https://hon-avatar.now.sh/7619944
 
 ##### Deploy using
 ```bash
-now -e REDIS_URL=@redis_avatar
+now
 ```

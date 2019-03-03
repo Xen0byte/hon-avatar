@@ -32,8 +32,5 @@
   },
   "repository": "https://github.com/scttcper/hon-avatar.git",
   "author": "Scott Cooper <scttcper@gmail.com>",
-  "license": "MIT",
-  "env": {
-    "REDIS_URL": "@redis_avatar"
-  }
+  "license": "MIT"
 }
