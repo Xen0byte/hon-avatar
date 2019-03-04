@@ -7,11 +7,10 @@ describe('avatar', function () {
   this.timeout(10000);
   it('should return avatar', function () {
     return request(server.listener)
-      .get('/7619944')
+      .get('/693435')
       .expect(200)
       .then((res) => {
-        console.log(res.text);
-        assert(res.text.indexOf('7619944') !== -1);
+        assert(res.text.indexOf('693435') !== -1);
       });
   });
 

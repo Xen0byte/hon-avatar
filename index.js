@@ -1,27 +1,23 @@
-const request = require('request-promise-native');
-const isNumber = require('is-number');
 const Hapi = require('hapi');
 const Joi = require('joi');
+const got = require('got');
 
 const server = Hapi.server({ port: 5000 });
 
-const opt = {
-  method: 'HEAD',
-  timeout: 2000,
-  uri: 'https://www.heroesofnewerth.com/getAvatar_SSL.php',
-  qs: {
-    id: '',
-  },
-  followRedirect: false,
-  resolveWithFullResponse: true,
-  simple: false,
-};
-const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
+const DEFAULT_AVATAR =  'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
 
 async function getAvatar(accountId) {
-  opt.qs.id = accountId;
+  const url = 'https://www.heroesofnewerth.com/getAvatar_SSL.php';
   try {
-    const res = await request(opt);
+    const res = await got.head(url, {
+      timeout: 2000,
+      query: {
+        id: accountId,
+      },
+      retry: 0,
+      followRedirect: false,
+      decompress: false,
+    });
     if (res.headers.location.includes('icons//')) {
       return res.headers.location.replace('icons//', 'icons/');
     }
@@ -38,7 +34,9 @@ server.route({
     cors: { origin: 'ignore' },
     validate: {
       params: {
-        id: Joi.number().required().max(1000000000),
+        id: Joi.number()
+          .required()
+          .max(1000000000),
       },
     },
     cache: {
