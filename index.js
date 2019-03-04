@@ -31,7 +31,6 @@ async function getAvatar(accountId) {
   }
 }
 
-let cache;
 server.route({
   method: 'GET',
   path: '/{id?}',
@@ -39,49 +38,28 @@ server.route({
     cors: { origin: 'ignore' },
     validate: {
       params: {
-        id: Joi.string()
-          .min(0)
-          .max(11),
+        id: Joi.number().required().max(1000000000),
       },
     },
     cache: {
       expiresIn: 60 * 120 * 1000, // 120 min
     },
     async handler(req) {
-      if (!isNumber(req.params.id)) {
-        return DEFAULT_AVATAR;
-      }
-      const value = await cache
-        .get({
-          id: String(req.params.id),
-          segment: 'avatar',
-        })
-        .catch(console.error);
-      if (value) {
-        return value;
-      }
       const avatar = await getAvatar(req.params.id);
-      await cache.set(
-        { id: String(req.params.id), segment: 'avatar' },
-        avatar,
-        60 * 120 * 1000,
-      );
       return avatar;
     },
   },
 });
 
 async function init() {
-  cache = server.cache({ segment: 'avatar', expiresIn: 60 * 120 * 1000 });
   await server.initialize();
   return server;
 }
 module.exports = init;
 
-/* istanbul ignore if */
 if (!module.parent) {
-  init()
-    .then(svr => svr.start())
-    .catch(console.error);
+  server.start();
   console.log('Listening on http://localhost:5000');
 }
+
+module.exports = server;

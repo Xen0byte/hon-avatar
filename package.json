@@ -5,8 +5,7 @@
   "scripts": {
     "start": "node index",
     "lint": "eslint index.js test",
-    "test": "mocha test/index.spec.js",
-    "coverage": "nyc npm test"
+    "test": "mocha test/index.spec.js"
   },
   "dependencies": {
     "hapi": "^18.1.0",
@@ -21,7 +20,6 @@
     "eslint-formatter-pretty": "^2.1.1",
     "eslint-plugin-import": "^2.16.0",
     "mocha": "^6.0.2",
-    "nyc": "^13.3.0",
     "supertest": "^3.4.2"
   },
   "nyc": {
