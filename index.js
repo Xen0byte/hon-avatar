@@ -1,10 +1,7 @@
-const Hapi = require('hapi');
-const Joi = require('joi');
 const got = require('got');
+const Joi = require('@hapi/joi');
 
-const server = Hapi.server({ port: 5000 });
-
-const DEFAULT_AVATAR =  'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
+const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
 
 async function getAvatar(accountId) {
   const url = 'https://www.heroesofnewerth.com/getAvatar_SSL.php';
@@ -27,37 +24,20 @@ async function getAvatar(accountId) {
   }
 }
 
-server.route({
-  method: 'GET',
-  path: '/{id?}',
-  options: {
-    cors: { origin: 'ignore' },
-    validate: {
-      params: {
-        id: Joi.number()
-          .required()
-          .max(1000000000),
-      },
-    },
-    cache: {
-      expiresIn: 60 * 120 * 1000, // 120 min
-    },
-    async handler(req) {
-      const avatar = await getAvatar(req.params.id);
-      return avatar;
-    },
-  },
-});
+const schema = Joi.number()
+  .positive()
+  .integer()
+  .max(1000000000)
+  .required();
 
-async function init() {
-  await server.initialize();
-  return server;
-}
-module.exports = init;
+module.exports = (req, res) => {
+  const id = Number(req.url.replace('/', ''));
 
-if (!module.parent) {
-  server.start();
-  console.log('Listening on http://localhost:5000');
-}
+  const result = Joi.validate(id, schema);
+  if (result.error) {
+    res.statusCode = 500;
+    return res.end(result.error.message);
+  }
 
-module.exports = server;
+  return getAvatar().then(avatar => res.end(avatar));
+};
