@@ -1,4 +1,5 @@
 const got = require('got');
+const micro = require('micro');
 const Joi = require('@hapi/joi');
 
 const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
@@ -18,6 +19,9 @@ async function getAvatar(accountId) {
     if (res.headers.location.includes('icons//')) {
       return res.headers.location.replace('icons//', 'icons/');
     }
+    if (res.headers.location.includes('naeu-icb2')) {
+      return res.headers.location;
+    }
     return DEFAULT_AVATAR;
   } catch (e) {
     return DEFAULT_AVATAR;
@@ -30,14 +34,15 @@ const schema = Joi.number()
   .max(1000000000)
   .required();
 
-module.exports = (req, res) => {
-  const id = Number(req.url.replace('/', ''));
+module.exports = async (req, res) => {
+  const url = req.url.replace('/', '').trim();
+  const id = parseInt(url, 10);
 
   const result = Joi.validate(id, schema);
   if (result.error) {
-    res.statusCode = 500;
-    return res.end(result.error.message);
+    return micro.send(res, 500, result.error.message);
   }
 
-  return getAvatar().then(avatar => res.end(avatar));
+  const avatar = await getAvatar(id);
+  return micro.send(res, 200, avatar);
 };

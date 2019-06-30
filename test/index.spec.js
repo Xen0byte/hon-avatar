@@ -1,34 +1,34 @@
-const request = require('supertest');
-const assert = require('assert');
+const http = require('http');
+const micro = require('micro');
+const test = require('ava');
+const listen = require('test-listen');
+const got = require('got');
+const app = require('../index');
 
-const server = require('../index');
+test('should return avatar', async (t) => {
+  const service = new http.Server(micro(app));
 
-describe('avatar', function () {
-  this.timeout(10000);
-  it('should return avatar', function () {
-    return request(server.listener)
-      .get('/693435')
-      .expect(200)
-      .then((res) => {
-        assert(res.text.indexOf('693435') !== -1);
-      });
-  });
+  const url = await listen(service);
+  const res = await got.get(`${url}/3313433`);
 
-  it('should return default', function () {
-    return request(server.listener)
-      .get('/12345')
-      .expect(200, 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png');
-  });
+  t.assert(res.body.includes('iward'));
+  service.close();
+});
 
-  it('should check length', function () {
-    return request(server.listener)
-      .get('/12345444441123')
-      .expect(400);
-  });
+test('should check length', async (t) => {
+  const service = new http.Server(micro(app));
 
-  it('should check is number', function () {
-    return request(server.listener)
-      .get('/hello')
-      .expect(400);
-  });
+  const url = await listen(service);
+  await t.throwsAsync(got.get(`${url}/12345444441123`));
+  service.close();
+});
+
+test('should return default', async (t) => {
+  const service = new http.Server(micro(app));
+
+  const url = await listen(service);
+  const res = await got.get(`${url}/12345`);
+
+  t.is(res.body, 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png');
+  service.close();
 });
