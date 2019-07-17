@@ -2,6 +2,7 @@
   "name": "hon-avatar",
   "version": 2,
   "builds": [{ "src": "index.js", "use": "@now/node" }],
+  "regions": ["pdx1"],
   "routes": [
     {
       "src": "/(.*)",
