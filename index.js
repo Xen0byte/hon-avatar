@@ -8,7 +8,7 @@ async function getAvatar(accountId) {
   const url = 'https://www.heroesofnewerth.com/getAvatar_SSL.php';
   try {
     const res = await got.head(url, {
-      timeout: 2000,
+      timeout: 400,
       query: {
         id: accountId,
       },
