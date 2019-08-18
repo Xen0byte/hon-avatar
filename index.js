@@ -4,6 +4,8 @@ const Joi = require('@hapi/joi');
 
 const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+
 async function getAvatar(accountId) {
   const url = 'https://www.heroesofnewerth.com/getAvatar_SSL.php';
   try {
