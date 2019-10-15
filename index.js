@@ -34,13 +34,14 @@ const schema = Joi.number()
   .positive()
   .integer()
   .max(1000000000)
+  .message('invalid match id')
   .required();
 
 module.exports = async (req, res) => {
   const url = req.url.replace('/', '').trim();
   const id = parseInt(url, 10);
 
-  const result = Joi.validate(id, schema);
+  const result = schema.validate(id);
   if (result.error) {
     return micro.send(res, 500, result.error.message);
   }

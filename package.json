@@ -8,13 +8,13 @@
     "test": "ava test/index.spec.js"
   },
   "dependencies": {
-    "@hapi/joi": "15.1.1",
+    "@hapi/joi": "16.1.7",
     "got": "9.6.0",
     "micro": "9.3.5-canary.3"
   },
   "devDependencies": {
-    "ava": "2.3.0",
-    "eslint": "6.1.0",
+    "ava": "2.4.0",
+    "eslint": "6.5.1",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-formatter-pretty": "2.1.1",
     "eslint-plugin-import": "2.18.2",
