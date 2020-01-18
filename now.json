@@ -1,16 +1,21 @@
 {
   "name": "hon-avatar",
   "version": 2,
-  "builds": [{ "src": "index.js", "use": "@now/node" }],
   "regions": ["pdx1"],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/index.js",
+      "dest": "api/index.js",
       "headers": {
         "cache-control": "s-maxage=86400",
         "Access-Control-Allow-Origin": "*"
       }
     }
-  ]
+  ],
+  "functions": {
+    "api/index.js": {
+      "memory": 128,
+      "maxDuration": 3
+    }
+  }
 }

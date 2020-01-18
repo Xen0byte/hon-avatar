@@ -7,11 +7,11 @@ const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 async function getAvatar(accountId) {
-  const url = 'https://www.heroesofnewerth.com/getAvatar_SSL.php';
+  const url = 'http://www.heroesofnewerth.com/getAvatar_SSL.php';
   try {
     const res = await got.head(url, {
       timeout: 400,
-      query: {
+      searchParams: {
         id: accountId,
       },
       retry: 0,
@@ -34,16 +34,15 @@ const schema = Joi.number()
   .positive()
   .integer()
   .max(1000000000)
-  .message('invalid match id')
+  .message('invalid player id')
   .required();
 
 module.exports = async (req, res) => {
   const url = req.url.replace('/', '').trim();
   const id = parseInt(url, 10);
-
   const result = schema.validate(id);
   if (result.error) {
-    return micro.send(res, 500, result.error.message);
+    return micro.send(res, 200, DEFAULT_AVATAR);
   }
 
   const avatar = await getAvatar(id);

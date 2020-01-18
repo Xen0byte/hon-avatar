@@ -3,7 +3,7 @@ const micro = require('micro');
 const test = require('ava');
 const listen = require('test-listen');
 const got = require('got');
-const app = require('../index');
+const app = require('../api/index');
 
 test('should return avatar', async (t) => {
   const service = new http.Server(micro(app));
@@ -19,7 +19,9 @@ test('should check length', async (t) => {
   const service = new http.Server(micro(app));
 
   const url = await listen(service);
-  await t.throwsAsync(got.get(`${url}/12345444441123`));
+  const res = await got.get(`${url}/12345444441123`);
+
+  t.is(res.body, 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png');
   service.close();
 });
 
