@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node index",
     "lint": "eslint .",
-    "test": "ava test/index.spec.ts"
+    "test": "ava test/index.spec.js"
   },
   "dependencies": {
     "@hapi/joi": "17.1.1",
