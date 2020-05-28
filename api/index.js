@@ -1,11 +1,16 @@
-const got = require('got');
-const micro = require('micro');
+// @ts-check
+
+const got = require('got').default;
+const { send } = require('micro');
 const Joi = require('@hapi/joi');
 
 const DEFAULT_AVATAR = 'https://s3.amazonaws.com/naeu-icb2/icons/default/account/default.png';
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
+/**
+ * @param {number} accountId
+ */
 async function getAvatar(accountId) {
   const url = 'http://www.heroesofnewerth.com/getAvatar_SSL.php';
   try {
@@ -37,14 +42,20 @@ const schema = Joi.number()
   .message('invalid player id')
   .required();
 
-module.exports = async (req, res) => {
+/**
+ * @typedef {import('micro').RequestHandler} RequestHandler
+ * @type {RequestHandler}
+ */
+async function handleRequest(req, res) {
   const url = req.url.replace('/', '').trim();
   const id = parseInt(url, 10);
   const result = schema.validate(id);
   if (result.error) {
-    return micro.send(res, 200, DEFAULT_AVATAR);
+    return send(res, 200, DEFAULT_AVATAR);
   }
 
   const avatar = await getAvatar(id);
-  return micro.send(res, 200, avatar);
-};
+  return send(res, 200, avatar);
+}
+
+module.exports = handleRequest;

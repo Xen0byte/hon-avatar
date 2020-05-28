@@ -3,6 +3,7 @@ const micro = require('micro');
 const test = require('ava');
 const listen = require('test-listen');
 const got = require('got');
+
 const app = require('../api/index');
 
 test('should return avatar', async (t) => {
